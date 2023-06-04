@@ -1,0 +1,36 @@
+# Folder wygenerowany przez kompilator
+build/
+
+# Pliki wykonywalne
+*.exe
+*.dll
+*.so
+
+# Pliki projektu Visual Studio Code
+.vscode/
+
+# Pliki projektu Visual Studio
+*.suo
+*.vcxproj.user
+*.vcproj
+*.ncb
+*.sdf
+*.opensdf
+*.sln.docstates
+
+# Pliki konfiguracyjne
+*.ini
+
+# Pliki tymczasowe
+*.o
+*.obj
+
+# Pliki logów
+*.log
+
+# Pliki projektowe
+*.user
+*.suo
+*.sln
+*.vcxproj
+*.vcxproj.filters
