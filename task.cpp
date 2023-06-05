@@ -10,10 +10,11 @@ unsigned int task::getTaskNumber() {
 	return taskNumber;
 }
 
-//std::ostream& task::operator<<(std::ostream& os, const task& ts) {
-//	os << "Task number: " << ts.taskNumber << std::endl;
-//	for (int i = 0; i < ts.resources.size(); i++) {
-//		os << i << ": Time: " << ts.resources[i].getTime() << ", cost: " << ts.resources[i].getPrice() << std::endl;
-//	}
-//	return os;
-//}
+std::ostream& operator<<(std::ostream& os, const task& ts) {
+	os << "Task number: " << ts.taskNumber << std::endl;
+	std::vector<resource> resources = ts.resources;
+	for (int i = 0; i < ts.resources.size(); i++) {
+		os << i << ": Time: " << resources.at(i).getTime() << ", cost: " << resources[i].getPrice() << std::endl;
+	}
+	return os;
+}

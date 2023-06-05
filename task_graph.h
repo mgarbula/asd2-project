@@ -16,7 +16,8 @@ private:
 	void createTasksAndHelpEdges(std::vector<std::string>, std::vector<std::string>, std::vector<std::string>);
 	unsigned int getNumber(std::string);
 	std::vector<resource> getResources(std::string, std::string);
-	std::vector<std::pair<int, int>> getEdges(std::string);
+	void getHelpEdgesFromFile(unsigned int, std::string);
+	void createEdges();
 public:
 	task_graph(std::string);
 };

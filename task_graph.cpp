@@ -36,24 +36,64 @@ std::vector<resource> task_graph::getResources(std::string time, std::string cos
 
 		int taskTime = stoi(time.substr(lastTime, timeIndex - 1));
 		int taskCost = stoi(cost.substr(lastCost, costIndex - 1));
-		timeIndex++; costIndex++;
 		resource resource(taskTime, taskCost);
 		resources.push_back(resource);
-		if (taskTime >= time.size() || taskCost >= cost.size()) {
+		if (timeIndex >= time.size() || costIndex >= cost.size()) {
 			break;
 		}
 	}
 	return resources;
 }
 
+void task_graph::getHelpEdgesFromFile(unsigned int number, std::string task) {
+	std::pair<std::pair<int, int>, int> edgeWithWeight;
+	std::pair<int, int> edge;
+	int spaces = 0;
+	int index = 0;
+
+	while (spaces < 2) {
+		if (task[index++] == ' ') {
+			spaces++;
+		}
+	}
+
+	while (index < task.size() - 1) {
+		std::string neigbourStr;
+		while (task[index] != '(') {
+			neigbourStr += task[index++];
+		}
+		int neighbour = stoi(neigbourStr);
+		index++;
+		std::string weightStr;
+		while (task[index] != ')') {
+			weightStr += task[index++];
+		}
+		int weight = stoi(weightStr);
+		index++;
+		edge.first = number;
+		edge.second = neighbour;
+		edgeWithWeight.first = edge;
+		edgeWithWeight.second = weight;
+		helpEdges.push_back(edgeWithWeight);
+	}
+}
+
+void task_graph::createEdges() {
+	for (std::vector<std::pair<std::pair<int, int>, int>>::iterator it = helpEdges.begin(); it != helpEdges.end(); ++it) {
+		std::pair<std::pair<int, int>, int> fullPair = *it;
+		std::pair<task, task> taskEdge(vertices[fullPair.first.first], vertices[fullPair.first.second]);
+		std::pair<std::pair<task, task>, int> edgeWithWeight(taskEdge, fullPair.second);
+		edges.push_back(edgeWithWeight);
+	}
+}
+
 void task_graph::createTasksAndHelpEdges(std::vector<std::string> tasks, std::vector<std::string> times, std::vector<std::string> costs) {
 	for (int i = 0; i < tasks.size(); i++) {
 		unsigned int number = getNumber(tasks[i]);
 		std::vector<resource> resources = getResources(times[i], costs[i]);
-		//std::vector<std::pair<int, int>> edges = getEdges(tasks[i]);
+		getHelpEdgesFromFile(number, tasks[i]);
 		task task(number, resources);
 		vertices.push_back(task);
-
 	}
 }
 
@@ -63,7 +103,7 @@ task_graph::task_graph(std::string pathToFile) {
 	std::vector<std::string> costs = readFromFile(pathToFile, "@cost ");
 
 	createTasksAndHelpEdges(tasks, times, costs);
-
+	createEdges();
 	/*for (int i = 0; i < vertices.size(); i++) {
 		std::cout << vertices[i];
 	}*/
