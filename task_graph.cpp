@@ -1,4 +1,6 @@
 #include "task_graph.h"
+#include <queue>
+#include <algorithm>
 
 std::vector<std::string> task_graph::readFromFile(std::string pathToFile, std::string what) {
 	std::ifstream myFile(pathToFile);
@@ -78,8 +80,8 @@ void task_graph::getHelpEdgesFromFile(unsigned int number, std::string task) {
 	}
 }
 
-void task_graph::createEdges() {
-	for (std::vector<std::pair<std::pair<int, int>, int>>::iterator it = helpEdges.begin(); it != helpEdges.end(); ++it) {
+void task_graph::createEdges(std::vector<std::pair<std::pair<int, int>, int>> help) {
+	for (std::vector<std::pair<std::pair<int, int>, int>>::iterator it = help.begin(); it != help.end(); ++it) {
 		std::pair<std::pair<int, int>, int> fullPair = *it;
 		std::pair<task, task> taskEdge(vertices[fullPair.first.first], vertices[fullPair.first.second]);
 		std::pair<std::pair<task, task>, int> edgeWithWeight(taskEdge, fullPair.second);
@@ -103,8 +105,40 @@ task_graph::task_graph(std::string pathToFile) {
 	std::vector<std::string> costs = readFromFile(pathToFile, "@cost ");
 
 	createTasksAndHelpEdges(tasks, times, costs);
-	createEdges();
+	createEdges(helpEdges);
 	/*for (int i = 0; i < vertices.size(); i++) {
 		std::cout << vertices[i];
 	}*/
+}
+
+std::vector<task> task_graph::getVertices() {
+	return vertices;
+}
+
+std::vector<std::pair<std::pair<task, task>, int>> task_graph::breadthFirstSearch() {
+	std::queue<task> queue;
+	std::vector<task> visited;
+	std::vector<std::pair<std::pair<task, task>, int>> treeEdges;
+
+	queue.push(vertices[0]);
+
+	while (!queue.empty()) {
+		task elem = queue.front();
+		visited.push_back(elem);
+		queue.pop();
+
+		std::vector<std::pair<std::pair<task, task>, int>> help(10);
+		auto it = std::copy_if(edges.begin(), edges.end(), help.begin(),
+			[elem](std::pair<std::pair<task, task>, int> pair) { return elem == pair.first.first; });
+		//help.resize(std::distance(help.begin(), it));
+
+		std::for_each(help.begin(), help.end(), [&treeEdges, &queue, &visited](std::pair<std::pair<task, task>, int> pair) { 
+			if (std::find(visited.begin(), visited.end(), pair.first.second) == visited.end()) {
+				queue.push(pair.first.second);
+				treeEdges.push_back(pair);
+			}
+		});
+	}
+
+	return treeEdges;
 }

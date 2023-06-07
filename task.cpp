@@ -18,3 +18,7 @@ std::ostream& operator<<(std::ostream& os, const task& ts) {
 	}
 	return os;
 }
+
+bool operator==(const task& taskL, const task& taskR) {
+	return taskL.taskNumber == taskR.taskNumber;
+}

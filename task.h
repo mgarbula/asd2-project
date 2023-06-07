@@ -14,6 +14,7 @@ public:
 	std::vector<resource> getResources();
 	unsigned int getTaskNumber();
 	friend std::ostream& operator<<(std::ostream& os, const task& ts);
+	friend bool operator==(const task&, const task&);
 };
 
 #endif 
