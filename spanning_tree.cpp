@@ -3,6 +3,7 @@
 #include <algorithm>
 
 spanning_tree::spanning_tree(task_graph graph) {
+	vertices = graph.getVertices();
 	edges = graph.breadthFirstSearch();
 
 #ifdef DEBUG

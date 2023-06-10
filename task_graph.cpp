@@ -106,9 +106,9 @@ task_graph::task_graph(std::string pathToFile) {
 
 	createTasksAndHelpEdges(tasks, times, costs);
 	createEdges(helpEdges);
-	/*for (int i = 0; i < vertices.size(); i++) {
+	for (int i = 0; i < vertices.size(); i++) {
 		std::cout << vertices[i];
-	}*/
+	}
 }
 
 std::vector<task> task_graph::getVertices() {
@@ -127,10 +127,13 @@ std::vector<std::pair<std::pair<task, task>, int>> task_graph::breadthFirstSearc
 		visited.push_back(elem);
 		queue.pop();
 
-		std::vector<std::pair<std::pair<task, task>, int>> help(10);
-		auto it = std::copy_if(edges.begin(), edges.end(), help.begin(),
-			[elem](std::pair<std::pair<task, task>, int> pair) { return elem == pair.first.first; });
-		//help.resize(std::distance(help.begin(), it));
+		std::vector<std::pair<std::pair<task, task>, int>> help;
+
+		for (std::vector<std::pair<std::pair<task, task>, int>>::iterator it = edges.begin(); it != edges.end(); ++it) {
+			if (elem == (*it).first.first) {
+				help.push_back(*it);
+			}
+		}
 
 		std::for_each(help.begin(), help.end(), [&treeEdges, &queue, &visited](std::pair<std::pair<task, task>, int> pair) { 
 			if (std::find(visited.begin(), visited.end(), pair.first.second) == visited.end()) {

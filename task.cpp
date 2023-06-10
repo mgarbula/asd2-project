@@ -2,6 +2,8 @@
 
 task::task(unsigned int _taskNumber, std::vector<resource> _resources) : taskNumber{ _taskNumber }, resources{ _resources } {}
 
+task::task(const task& t) : taskNumber{ t.taskNumber }, resources{ t.resources }  {}
+
 std::vector<resource> task::getResources() {
 	return resources;
 }

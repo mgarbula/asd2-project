@@ -10,6 +10,8 @@ private:
 	const unsigned int taskNumber;
 	std::vector<resource> resources;
 public:
+	task() : taskNumber{ INT_MAX } {}
+	task(const task&);
 	task(unsigned int, std::vector<resource>);
 	std::vector<resource> getResources();
 	unsigned int getTaskNumber();
@@ -17,5 +19,4 @@ public:
 	friend bool operator==(const task&, const task&);
 };
 
-#endif 
-
+#endif
