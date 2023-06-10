@@ -17,9 +17,11 @@ private:
 	unsigned int getNumber(std::string);
 	std::vector<resource> getResources(std::string, std::string);
 	void getHelpEdgesFromFile(unsigned int, std::string);
-	void createEdges();
+	void createEdges(std::vector<std::pair<std::pair<int, int>, int>>);
 public:
 	task_graph(std::string);
+	std::vector<std::pair<std::pair<task, task>, int>> breadthFirstSearch();
+	std::vector<task> getVertices();
 };
 
 #endif

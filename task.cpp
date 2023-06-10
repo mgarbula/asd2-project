@@ -2,6 +2,8 @@
 
 task::task(unsigned int _taskNumber, std::vector<resource> _resources) : taskNumber{ _taskNumber }, resources{ _resources } {}
 
+task::task(const task& t) : taskNumber{ t.taskNumber }, resources{ t.resources }  {}
+
 std::vector<resource> task::getResources() {
 	return resources;
 }
@@ -17,4 +19,8 @@ std::ostream& operator<<(std::ostream& os, const task& ts) {
 		os << i << ": Time: " << resources.at(i).getTime() << ", cost: " << resources[i].getPrice() << std::endl;
 	}
 	return os;
+}
+
+bool operator==(const task& taskL, const task& taskR) {
+	return taskL.taskNumber == taskR.taskNumber;
 }

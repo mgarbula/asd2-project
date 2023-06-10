@@ -17,6 +17,8 @@ build/
 *.sdf
 *.opensdf
 *.sln.docstates
+.vs/
+Debug/
 
 # Pliki konfiguracyjne
 *.ini
@@ -34,3 +36,5 @@ build/
 *.sln
 *.vcxproj
 *.vcxproj.filters
+
+*.txt
