@@ -17,6 +17,7 @@ public:
 	unsigned int getTaskNumber();
 	friend std::ostream& operator<<(std::ostream& os, const task& ts);
 	friend bool operator==(const task&, const task&);
+	task& task::operator = (const task& other);
 };
 
 #endif
