@@ -1,5 +1,5 @@
 #include "spanning_tree.h"
-#include "graph.h"
+#include "resourceManager.h"
 #include <queue>
 #include<random>
 #include <algorithm>

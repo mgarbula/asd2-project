@@ -1,19 +1,21 @@
-#include "graph.h"
+#include "resourceManager.h"
 #include <random>
 #include <iostream>
 
-graph::graph(unsigned int size, resource resources[])
+int resourceManager::size = 0;
+resource* resourceManager::resources = NULL;
+
+void resourceManager::init(unsigned int _size, resource _resources[])
 {
-    this->size = size;
-    this->resources = resources;
-    arr = new int[size];
-    for(int i=0;i<size;i++)
-    {
-        arr[i] = selectRes();
-        resources[arr[i]].use();
-    }
+    size = _size;
+    resources = _resources;
 }
-int graph::selectRes()
+
+/// <summary>
+/// Returns resource randomly
+/// </summary>
+/// <returns>Type Resource</returns>
+resource resourceManager::selectRes()
 {
     double value = randomDouble();
     int resSize = 2;//(sizeof(resources) / sizeof(resources[0]));
@@ -38,7 +40,6 @@ int graph::selectRes()
 #endif
         // DEBUGING
 
-        return j;
     }
     else if (value <= 0.30) // fastest res
     {
@@ -58,7 +59,6 @@ int graph::selectRes()
 #endif
         // DEBUGING
 
-        return j;
     }
     else if (value <= 0.60) // Min(czas*koszt)
     {
@@ -78,7 +78,6 @@ int graph::selectRes()
 #endif
         // DEBUGING
 
-        return j;
     }
     else if (value <= 0.80) // Najdluzej bezczyny zasob
     {
@@ -98,7 +97,6 @@ int graph::selectRes()
 #endif
         // DEBUGING
 
-        return j;
     }
     else // Najrzadziej alokowany
     {
@@ -118,10 +116,15 @@ int graph::selectRes()
 #endif
         // DEBUGING
 
-        return j;
     }
+    return resources[j];
 }
-double graph::randomDouble(double max)
+/// <summary>
+/// Returns random double between 0 and max
+/// </summary>
+/// <param name="max"></param>
+/// <returns>Random double <0, max)</returns>
+double resourceManager::randomDouble(double max)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -131,11 +134,7 @@ double graph::randomDouble(double max)
     return dist(gen);
 }
 
-void graph::connect(unsigned int source, unsigned int destiny, unsigned int edgeWeight)
+void resourceManager::del()
 {
-    std::cout << source << " -(" << edgeWeight << ")->" << destiny << " : method(" << selectRes() << ")";
-}
-graph::~graph()
-{
-    delete[] arr;
+    delete[] resources;
 }
