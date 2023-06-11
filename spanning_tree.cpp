@@ -7,6 +7,7 @@
 spanning_tree::spanning_tree(task_graph graph) {
 	vertices = graph.getVertices();
 	edges = graph.breadthFirstSearch();
+	howManyResources = graph.getHowManyResources();
 
 #ifdef DEBUG
 	std::for_each(edges.begin(), edges.end(), [](std::pair<std::pair<task, task>, int> edge) { std::cout << edge.first.first << " - " << edge.first.second << ": " << edge.second << std::endl });
@@ -35,7 +36,20 @@ std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tr
 	return new_pair;
 
 }
-spanning_tree spanning_tree::mutation() {
-	//code
-	
+//spanning_tree spanning_tree::mutation() {
+//	//code
+//	
+//}
+
+unsigned int spanning_tree::countCost() {
+	unsigned int cost = 0;
+	for (auto v : vertices) {
+		resourceManager::init(v.getResources());
+		cost += resourceManager::selectRes().getPrice();
+	}
+	return cost;
+}
+
+unsigned int spanning_tree::getHowManyResources() {
+	return howManyResources;
 }

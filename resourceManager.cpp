@@ -2,12 +2,10 @@
 #include <random>
 #include <iostream>
 
-int resourceManager::size = 0;
-resource* resourceManager::resources = NULL;
+std::vector<resource> resourceManager::resources;
 
-void resourceManager::init(unsigned int _size, resource _resources[])
+void resourceManager::init(std::vector<resource> _resources)
 {
-    size = _size;
     resources = _resources;
 }
 
@@ -132,9 +130,4 @@ double resourceManager::randomDouble(double max)
     double min = 0.0;
     std::uniform_real_distribution<> dist(min, max);
     return dist(gen);
-}
-
-void resourceManager::del()
-{
-    delete[] resources;
 }

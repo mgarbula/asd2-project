@@ -99,6 +99,21 @@ void task_graph::createTasksAndHelpEdges(std::vector<std::string> tasks, std::ve
 	}
 }
 
+unsigned int task_graph::getHowManyResources() {
+	return howManyResources;
+}
+
+void task_graph::readHowManyRes(std::string pathToFile) {
+	std::ifstream myFile(pathToFile);
+	std::string helpText;
+
+	while (std::getline(myFile, helpText) && helpText.substr(0, 5) != "@proc");
+
+	int index = 0;
+	while (helpText[index++] != ' ');
+	howManyResources = stoi(helpText.substr(index, helpText.size() - 1));
+}
+
 task_graph::task_graph(std::string pathToFile) {
 	std::vector<std::string> tasks = readFromFile(pathToFile, "@tasks");
 	std::vector<std::string> times = readFromFile(pathToFile, "@times");
@@ -106,6 +121,7 @@ task_graph::task_graph(std::string pathToFile) {
 
 	createTasksAndHelpEdges(tasks, times, costs);
 	createEdges(helpEdges);
+	readHowManyRes(pathToFile);
 	for (int i = 0; i < vertices.size(); i++) {
 		std::cout << vertices[i];
 	}

@@ -7,18 +7,17 @@ Menadżer zasobów
 #define __RESOURCEMANAGER_H__
 
 #include "resource.h"
+#include <vector>
 
 class resourceManager
 {
 private:
     /* data */
-    static int size;
-    static resource* resources;
+    static std::vector<resource> resources;
 public:
-    static void init(unsigned int, resource[]);
+    static void init(std::vector<resource>);
     static resource selectRes(); //Random pick the next res
     static double randomDouble(double = 1.0); //Returns random double from 0 to 1
-    static void del();
 };
 
 
