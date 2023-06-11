@@ -4,11 +4,13 @@
 #include <vector>
 #include "task.h"
 #include "task_graph.h"
+#include "fenotype.h"
 
 class spanning_tree {
 public:
 	std::vector<task> vertices;
 	std::vector<std::pair<std::pair<task, task>, int>> edges;
+	std::vector<fenotype> currentFenotype;
 	unsigned int howManyResources;
 public:
 	spanning_tree(task_graph);
@@ -16,6 +18,7 @@ public:
 	spanning_tree mutation();
 	unsigned int countCost();
 	unsigned int getHowManyResources();
+	void mapToFenotype();
 };
 
 

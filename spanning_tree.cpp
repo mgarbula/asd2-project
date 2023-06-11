@@ -36,10 +36,10 @@ std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tr
 	return new_pair;
 
 }
-//spanning_tree spanning_tree::mutation() {
-//	//code
-//	
-//}
+spanning_tree spanning_tree::mutation() {
+	//code
+	
+}
 
 unsigned int spanning_tree::countCost() {
 	unsigned int cost = 0;
@@ -52,4 +52,12 @@ unsigned int spanning_tree::countCost() {
 
 unsigned int spanning_tree::getHowManyResources() {
 	return howManyResources;
+}
+
+void spanning_tree::mapToFenotype() {
+	currentFenotype.clear();
+	for (auto v : vertices) {
+		fenotype f(v);
+		currentFenotype.push_back(f);
+	}
 }
