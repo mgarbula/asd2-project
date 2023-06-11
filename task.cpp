@@ -24,3 +24,7 @@ std::ostream& operator<<(std::ostream& os, const task& ts) {
 bool operator==(const task& taskL, const task& taskR) {
 	return taskL.taskNumber == taskR.taskNumber;
 }
+ task & task::operator = (const task& other) {
+	 this->resources = other.resources;
+	 return *this;
+}
