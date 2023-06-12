@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 
-unsigned int size = 0;
+unsigned int resourceManager::size = 0;
 int resourceManager::prevRes = -1;
 int resourceManager::recordedTime = 0;
 record* resourceManager::resources = NULL;
