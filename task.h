@@ -7,6 +7,7 @@
 
 class task {
 private:
+	resource the_resource;
 	const unsigned int taskNumber;
 	std::vector<resource> resources;
 public:
@@ -18,6 +19,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const task& ts);
 	friend bool operator==(const task&, const task&);
 	task& operator = (const task& other);
+	void setResource(resource resource_);
 };
 
 #endif

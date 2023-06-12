@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 
-int resourceManager::size = 0;
+unsigned int size = 0;
 int resourceManager::prevRes = -1;
 int resourceManager::recordedTime = 0;
 record* resourceManager::resources = NULL;
@@ -157,9 +157,4 @@ double resourceManager::randomDouble(double max)
     double min = 0.0;
     std::uniform_real_distribution<> dist(min, max);
     return dist(gen);
-}
-
-void resourceManager::del()
-{
-    delete[] resources;
 }

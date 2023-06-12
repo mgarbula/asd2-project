@@ -28,3 +28,6 @@ bool operator==(const task& taskL, const task& taskR) {
 	 this->resources = other.resources;
 	 return *this;
 }
+ void task::setResource(resource resource_) {
+	 this->the_resource = resource_;
+ }

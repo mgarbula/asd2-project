@@ -7,11 +7,17 @@
 spanning_tree::spanning_tree(task_graph graph) {
 	vertices = graph.getVertices();
 	edges = graph.breadthFirstSearch();
-
+	howManyResources = graph.getHowManyResources();
+	totalCost = graph.getTotalCost();
 #ifdef DEBUG
 	std::for_each(edges.begin(), edges.end(), [](std::pair<std::pair<task, task>, int> edge) { std::cout << edge.first.first << " - " << edge.first.second << ": " << edge.second << std::endl });
 #endif // DEBUG
 
+}
+spanning_tree& spanning_tree::operator = (spanning_tree& other) {
+	this->vertices = other.vertices;
+	this->edges = other.edges;
+	return *this;
 }
 std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tree) {
 	std::random_device rd;
@@ -33,9 +39,42 @@ std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tr
 	}
 	std::pair<spanning_tree, spanning_tree> new_pair(tree1, tree2);
 	return new_pair;
+	
+}
+//spanning_tree spanning_tree::mutation() {
+//	//code
+//	
+//}
+
+unsigned int spanning_tree::countCost() {
+	return totalCost;
+}
+
+unsigned int spanning_tree::getHowManyResources() {
+	return howManyResources;
+}
+
+spanning_tree spanning_tree::mutation() {
+	//resourceManager res;
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	int min = 0;
+	std::uniform_real_distribution<> dist(min, vertices.size());
+	int cross_point = dist(gen);
+	spanning_tree tree = *this;
+	tree.vertices[cross_point].setResource(resourceManager::selectRes(vertices[cross_point].getResources()));
+	return tree;
 
 }
-spanning_tree spanning_tree::mutation() {
-	//code
-	return *this;
+spanning_tree spanning_tree::clonning() {
+	spanning_tree tree = *this;
+	return tree;
+}
+
+void spanning_tree::mapToFenotype() {
+	currentFenotype.clear();
+	for (auto v : vertices) {
+		fenotype f(v);
+		currentFenotype.push_back(f);
+	}
 }

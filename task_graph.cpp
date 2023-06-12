@@ -100,20 +100,33 @@ void task_graph::createTasksAndHelpEdges(std::vector<std::string> tasks, std::ve
 	}
 }
 
+unsigned int task_graph::getHowManyResources() {
+	return howManyResources;
+}
+
+void task_graph::readHowManyRes(std::string pathToFile) {
+	std::ifstream myFile(pathToFile);
+	std::string helpText;
+
+	while (std::getline(myFile, helpText) && helpText.substr(0, 5) != "@proc");
+
+	int index = 0;
+	while (helpText[index++] != ' ');
+	howManyResources = stoi(helpText.substr(index, helpText.size() - 1));
+}
 
 void task_graph::calcPerf()
 {
 	resourceManager::reset();
-	unsigned int* total = new unsigned int[2];
-	total[0] = total[1] = 0;
- 	for (int i = 0; i < vertices.size(); i++) {
-		resource r =  resourceManager::selectRes(vertices[i].getResources());
-		total[0] += r.getTime();
-		total[1] += r.getPrice();
-
+	totalCost = 0;
+	totalTime = 0;
+	for (auto v : vertices)
+	{
+		resource r = resourceManager::selectRes(v.getResources());
+		totalCost += r.getPrice();
+		totalTime += r.getTime();
 	}
-	totalTime = total[0];
-	totalCost = total[1];
+
 }
 
 task_graph::task_graph(std::string pathToFile) {
@@ -123,11 +136,11 @@ task_graph::task_graph(std::string pathToFile) {
 
 	createTasksAndHelpEdges(tasks, times, costs);
 	createEdges(helpEdges);
+	readHowManyRes(pathToFile);
 	for (int i = 0; i < vertices.size(); i++) {
 		std::cout << vertices[i];
 	}
-	resourceManager::init(vertices.size());
-
+	resourceManager::init(howManyResources);
 	calcPerf();
 	std::cout << "\n" << totalTime << " <- czas " << totalCost << " <- koszt\n";
 }

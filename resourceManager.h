@@ -18,9 +18,9 @@ class resourceManager
 {
 private:
     /* data */
+    static unsigned int size;
     static int prevRes;
     static int recordedTime;
-    static int size;
     static record* resources;
 public:
     static void reset();
