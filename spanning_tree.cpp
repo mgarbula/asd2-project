@@ -23,7 +23,7 @@ std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tr
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	int min = 0;
-	std::uniform_real_distribution<> dist(min, vertices.size());
+	std::uniform_real_distribution<> dist(min, vertices.size() - 1);
 	int cross_point =  dist(gen);
 	spanning_tree tree1 = *this;
 	spanning_tree tree2 = tree;
@@ -59,7 +59,7 @@ spanning_tree spanning_tree::mutation() {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	int min = 0;
-	std::uniform_real_distribution<> dist(min, vertices.size());
+	std::uniform_real_distribution<> dist(min, vertices.size() - 1);
 	int cross_point = dist(gen);
 	spanning_tree tree = *this;
 	tree.vertices[cross_point].setResource(resourceManager::selectRes(vertices[cross_point].getResources()));
