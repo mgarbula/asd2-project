@@ -74,3 +74,11 @@ spanning_tree spanning_tree::clonning() {
 	spanning_tree tree = *this;
 	return tree;
 }
+
+void spanning_tree::mapToFenotype() {
+	currentFenotype.clear();
+	for (auto v : vertices) {
+		fenotype f(v);
+		currentFenotype.push_back(f);
+	}
+}
