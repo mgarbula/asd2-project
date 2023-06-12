@@ -7,17 +7,28 @@ Menadżer zasobów
 #define __RESOURCEMANAGER_H__
 
 #include "resource.h"
+#include <vector>
+
+struct record {
+    int lastTime = 0;
+    int allocTimes = 0;
+};
 
 class resourceManager
 {
 private:
     /* data */
+    static int prevRes;
+    static int recordedTime;
     static int size;
-    static resource* resources;
+    static record* resources;
 public:
-    static void init(unsigned int, resource[]);
-    static resource selectRes(); //Random pick the next res
+    static void reset();
+    static void init(unsigned int);
+    static resource selectRes(std::vector<resource>); //Random pick the next res
     static double randomDouble(double = 1.0); //Returns random double from 0 to 1
+    static void startRecTransition(); 
+    static int getRecTransition();
     static void del();
 };
 

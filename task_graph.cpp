@@ -1,4 +1,5 @@
 #include "task_graph.h"
+#include "resourceManager.h"
 #include <queue>
 #include <algorithm>
 
@@ -99,6 +100,22 @@ void task_graph::createTasksAndHelpEdges(std::vector<std::string> tasks, std::ve
 	}
 }
 
+
+void task_graph::calcPerf()
+{
+	resourceManager::reset();
+	unsigned int* total = new unsigned int[2];
+	total[0] = total[1] = 0;
+ 	for (int i = 0; i < vertices.size(); i++) {
+		resource r =  resourceManager::selectRes(vertices[i].getResources());
+		total[0] += r.getTime();
+		total[1] += r.getPrice();
+
+	}
+	totalTime = total[0];
+	totalCost = total[1];
+}
+
 task_graph::task_graph(std::string pathToFile) {
 	std::vector<std::string> tasks = readFromFile(pathToFile, "@tasks");
 	std::vector<std::string> times = readFromFile(pathToFile, "@times");
@@ -109,6 +126,10 @@ task_graph::task_graph(std::string pathToFile) {
 	for (int i = 0; i < vertices.size(); i++) {
 		std::cout << vertices[i];
 	}
+	resourceManager::init(vertices.size());
+
+	calcPerf();
+	std::cout << "\n" << totalTime << " <- czas " << totalCost << " <- koszt\n";
 }
 
 std::vector<task> task_graph::getVertices() {

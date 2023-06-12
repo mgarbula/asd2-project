@@ -18,7 +18,13 @@ private:
 	std::vector<resource> getResources(std::string, std::string);
 	void getHelpEdgesFromFile(unsigned int, std::string);
 	void createEdges(std::vector<std::pair<std::pair<int, int>, int>>);
+
+	void calcPerf();
+	unsigned int totalCost;
+	unsigned int totalTime;
 public:
+	unsigned int getTotalCost() { return totalCost; }
+	unsigned int getTotalTime() { return totalTime; }
 	task_graph(std::string);
 	std::vector<std::pair<std::pair<task, task>, int>> breadthFirstSearch();
 	std::vector<task> getVertices();

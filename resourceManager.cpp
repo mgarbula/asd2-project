@@ -1,36 +1,58 @@
 #include "resourceManager.h"
 #include <random>
+#include <vector>
 #include <iostream>
 
 int resourceManager::size = 0;
-resource* resourceManager::resources = NULL;
+int resourceManager::prevRes = -1;
+int resourceManager::recordedTime = 0;
+record* resourceManager::resources = NULL;
 
-void resourceManager::init(unsigned int _size, resource _resources[])
+void resourceManager::init(unsigned int _size)
 {
     size = _size;
-    resources = _resources;
+    resources = new record[size];
+    for (int i = 0; i < size; i++)
+        resources[i] = record();
 }
+void resourceManager::reset()
+{
+    for (int i = 0; i < size; i++)
+        resources[i] = record();
+
+}
+
+void resourceManager::startRecTransition()
+{
+    prevRes = 0;
+    recordedTime = 0;
+}
+int resourceManager::getRecTransition()
+{
+    return recordedTime;
+}
+
 
 /// <summary>
 /// Returns resource randomly
 /// </summary>
 /// <returns>Type Resource</returns>
-resource resourceManager::selectRes()
+resource resourceManager::selectRes(std::vector<resource> _resources)
 {
     double value = randomDouble();
     int resSize = 2;//(sizeof(resources) / sizeof(resources[0]));
     int i, j;
     for (i = 0; i < resSize; i++)
-        resources[i].tick();
+        resources[i].lastTime++;
     if (value <= 0.15) // cheapest res
     {
         j = 0;
-        unsigned int minVal = resources[j].getPrice();
+        unsigned int minVal = _resources[j].getPrice();
         for (i = 1; i < resSize; i++)
         {
-            if (minVal > resources[i].getPrice())
+            if (minVal > _resources[i].getPrice())
             {
-                minVal = resources[i].getPrice();
+                minVal = _resources[i].getPrice();
                 j = i;
             }
         }
@@ -44,12 +66,12 @@ resource resourceManager::selectRes()
     else if (value <= 0.30) // fastest res
     {
         j = 0;
-        unsigned int minVal = resources[j].getTime();
+        unsigned int minVal = _resources[j].getTime();
         for (int i = 1; i < resSize; i++)
         {
-            if (minVal > resources[i].getTime())
+            if (minVal > _resources[i].getTime())
             {
-                minVal = resources[i].getTime();
+                minVal = _resources[i].getTime();
                 j = i;
             }
         }
@@ -63,15 +85,16 @@ resource resourceManager::selectRes()
     else if (value <= 0.60) // Min(czas*koszt)
     {
         j = 0;
-        unsigned int minVal = resources[j].getTime() * resources[j].getPrice();
+        unsigned int minVal = _resources[j].getTime() * _resources[j].getPrice();
         for (int i = 1; i < resSize; i++)
         {
-            if (minVal > resources[i].getTime() * resources[i].getPrice())
+            if (minVal > _resources[i].getTime() * _resources[i].getPrice())
             {
-                minVal = resources[i].getTime() * resources[i].getPrice();
+                minVal = _resources[i].getTime() * _resources[i].getPrice();
                 j = i;
             }
         }
+
         // DEBUGING
 #ifdef DEBUG
         std::cout << "\tMin(czas*koszt) res : " << j << " at " << minVal << "\n";
@@ -82,12 +105,12 @@ resource resourceManager::selectRes()
     else if (value <= 0.80) // Najdluzej bezczyny zasob
     {
         j = 0;
-        unsigned int maxVal = resources[j].getLastUsedTimer();
+        unsigned int maxVal = resources[j].lastTime;
         for (int i = 1; i < resSize; i++)
         {
-            if (maxVal > resources[j].getLastUsedTimer())
+            if (maxVal > resources[j].lastTime)
             {
-                maxVal = resources[j].getLastUsedTimer();
+                maxVal = resources[j].lastTime;
                 j = i;
             }
         }
@@ -101,12 +124,12 @@ resource resourceManager::selectRes()
     else // Najrzadziej alokowany
     {
         j = 0;
-        unsigned int minVal = resources[j].getCount();
+        unsigned int minVal = resources[j].allocTimes;
         for (int i = 1; i < resSize; i++)
         {
-            if (minVal > resources[i].getCount())
+            if (minVal > resources[i].allocTimes)
             {
-                minVal = resources[i].getCount();
+                minVal = resources[i].allocTimes;
                 j = i;
             }
         }
@@ -117,7 +140,9 @@ resource resourceManager::selectRes()
         // DEBUGING
 
     }
-    return resources[j];
+    resources[j].lastTime = 0;
+    resources[j].allocTimes++;
+    return _resources[j];
 }
 /// <summary>
 /// Returns random double between 0 and max

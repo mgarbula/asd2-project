@@ -37,5 +37,5 @@ std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tr
 }
 spanning_tree spanning_tree::mutation() {
 	//code
-	
+	return *this;
 }
