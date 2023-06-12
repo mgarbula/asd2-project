@@ -5,9 +5,16 @@
 #include "task_graph.h"
 #include "spanning_tree.h"
 
-//std::vector<spanning_tree> createGeneration(task_graph tgraph, int generationSize) {
-//	for (int i = 0; i < )
-//}
+std::vector<spanning_tree> createGeneration(task_graph tgraph, int generationSize, int howManyRes) {
+	std::vector<spanning_tree> generation;
+
+	for (int i = 0; i < tgraph.getVertices().size() * generationSize * howManyRes; i++) {
+		spanning_tree stree(tgraph);
+		stree.mapToFenotype();
+		generation.push_back(stree);
+	}
+	return generation;
+}
 
 int main(){
     
@@ -28,10 +35,9 @@ int main(){
 
 	std::string fileName = "graf10.txt";
 	task_graph tgraph(fileName);
-	std::cout << "resources: " << tgraph.getHowManyResources();
-	//spanning_tree stree(tgraph);
+	spanning_tree stree(tgraph);
 
-	//std::vector<spanning_tree> generation = createGeneration(tgraph, generationSize);
+	std::vector<spanning_tree> generation = createGeneration(tgraph, generationSize, tgraph.getHowManyResources());
 
     return 0;
 }
