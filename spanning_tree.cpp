@@ -14,6 +14,10 @@ spanning_tree::spanning_tree(task_graph graph) {
 #endif // DEBUG
 
 }
+spanning_tree& spanning_tree::operator = (spanning_tree& other) {
+	this->vertices = other.vertices;
+	this->edges = other.edges;
+}
 std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tree) {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -52,4 +56,21 @@ unsigned int spanning_tree::countCost() {
 
 unsigned int spanning_tree::getHowManyResources() {
 	return howManyResources;
+}
+
+spanning_tree spanning_tree::mutation() {
+	//resourceManager res;
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	int min = 0;
+	std::uniform_real_distribution<> dist(min, vertices.size());
+	int cross_point = dist(gen);
+	spanning_tree tree = *this;
+	tree.vertices[cross_point].setResource(resourceManager::selectRes());
+	return tree;
+
+}
+spanning_tree spanning_tree::clonning() {
+	spanning_tree tree = *this;
+	return tree;
 }
