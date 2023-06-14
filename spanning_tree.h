@@ -4,13 +4,13 @@
 #include <vector>
 #include "task.h"
 #include "task_graph.h"
-#include "fenotype.h"
+//#include "fenotype.h"
 
 class spanning_tree {
 public:
 	std::vector<task> vertices;
 	std::vector<std::pair<std::pair<task, task>, int>> edges;
-	std::vector<fenotype> currentFenotype;
+	//std::vector<fenotype> currentFenotype;
 	unsigned int howManyResources;
 	unsigned int totalCost;
 public:

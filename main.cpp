@@ -11,7 +11,6 @@ std::vector<spanning_tree> createGeneration(task_graph tgraph, int generationSiz
 
 	for (int i = 0; i < tgraph.getVertices().size() * generationSize * howManyRes; i++) {
 		spanning_tree stree(tgraph);
-		stree.mapToFenotype();
 		generation.push_back(stree);
 	}
 	return generation;
@@ -29,6 +28,8 @@ std::vector<spanning_tree> selection(std::vector<spanning_tree> generation, int 
 }
 
 int main(){
+
+	resourceManager::reset();
 
 	int generationSize;
 	int howManyLoops;
@@ -64,17 +65,20 @@ int main(){
 	unsigned int bestCost = bestFromGeneration.totalCost;
 
 	while (currentLoops < howManyLoops) {
-		//std::cout << "HALOOO\n";
 		int i = 0;
 		int clones = clone * generation.size();
 		int crosses = cross * generation.size();
 		int mutations = mutation * generation.size();
 
-		//std::cout << "koszt pierwszego: " << newGeneartion[0].totalCost;
-
 		newGeneartion = selection(generation, clones + crosses + mutations);
 		
-		std::cout << "Best of new gen: " << newGeneartion[0].totalCost << std::endl;
+		//std::cout << "Best of new gen: " << newGeneartion[0].totalCost << std::endl;
+
+		/*for (auto g : newGeneartion) {
+			std::cout << "cost of that: " << g.totalCost << std::endl;
+		}*/
+
+		std::cout << "============================" << newGeneartion[0].totalCost << std::endl;
 
 		if (newGeneartion[0].totalCost < bestCost) {
 			currentLoops = 0;
@@ -103,7 +107,8 @@ int main(){
 				newGeneartion.push_back((*it).mutation());
 			}
 		}
-		for (auto tree : generation) {
+
+		for (auto tree : newGeneartion) {
 			tree.mapToFenotype();
 		}
 

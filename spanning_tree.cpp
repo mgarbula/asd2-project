@@ -8,7 +8,12 @@ spanning_tree::spanning_tree(task_graph graph) {
 	vertices = graph.getVertices();
 	edges = graph.breadthFirstSearch();
 	howManyResources = graph.getHowManyResources();
-	totalCost = graph.getTotalCost();
+	//totalCost = graph.getTotalCost();
+	mapToFenotype();
+	for (auto t : vertices) {
+		std::cout << "price: " << t.getTheResource().getPrice() << std::endl;
+	}
+	countCost();
 #ifdef DEBUG
 	std::for_each(edges.begin(), edges.end(), [](std::pair<std::pair<task, task>, int> edge) { std::cout << edge.first.first << " - " << edge.first.second << ": " << edge.second << std::endl });
 #endif // DEBUG
@@ -50,12 +55,14 @@ std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tr
 	return new_pair;
 	
 }
-//spanning_tree spanning_tree::mutation() {
-//	//code
-//	
-//}
 
 unsigned int spanning_tree::countCost() {
+	totalCost = 0;
+	for (auto t : vertices) {
+		int price = t.getTheResource().getPrice();
+		totalCost += price;
+		//std::cout << "zwiekszony koszt: " << price << std::endl;
+	}
 	return totalCost;
 }
 
@@ -81,9 +88,12 @@ spanning_tree spanning_tree::clonning() {
 }
 
 void spanning_tree::mapToFenotype() {
-	currentFenotype.clear();
-	for (auto v : vertices) {
-		fenotype f(v);
-		currentFenotype.push_back(f);
+	//currentFenotype.clear();
+	//for (auto v : vertices) {
+	for (int i = 0; i < vertices.size(); i++) {
+		//fenotype f(v);
+		//v.setResource(f.getResource());
+		vertices[i].setResource(resourceManager::selectRes(vertices[i].getResources()));
+		//currentFenotype.push_back(f);
 	}
 }
