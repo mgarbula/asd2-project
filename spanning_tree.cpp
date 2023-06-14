@@ -19,6 +19,15 @@ spanning_tree& spanning_tree::operator = (spanning_tree& other) {
 	this->edges = other.edges;
 	return *this;
 }
+spanning_tree& spanning_tree::operator=(const spanning_tree& other)
+{
+	if (this == &other)
+		return *this;
+	this->vertices = other.vertices;
+	this->edges = other.edges;
+	return *this;
+}
+
 std::pair<spanning_tree, spanning_tree> spanning_tree::crossing(spanning_tree tree) {
 	std::random_device rd;
 	std::mt19937 gen(rd());

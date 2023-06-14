@@ -16,6 +16,7 @@ public:
 public:
 	//spanning_tree() {}
 	spanning_tree(task_graph);
+	spanning_tree& operator=(const spanning_tree& other);
 	spanning_tree& operator = (spanning_tree& other);
 	std::pair<spanning_tree, spanning_tree> crossing(spanning_tree);//funckja przyjmuje jako argument przyjmuje drzewo i po skrzyzowaniu zwraca pare drzew tego z argumentu i tego biezacego
 	spanning_tree mutation();

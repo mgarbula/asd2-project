@@ -123,6 +123,7 @@ void task_graph::calcPerf()
 	for (auto v : vertices)
 	{
 		resource r = resourceManager::selectRes(v.getResources());
+		v.setResource(r);
 		totalCost += r.getPrice();
 		totalTime += r.getTime();
 	}

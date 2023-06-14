@@ -31,3 +31,7 @@ bool operator==(const task& taskL, const task& taskR) {
  void task::setResource(resource resource_) {
 	 this->the_resource = resource_;
  }
+ resource task::getTheResource()
+ {
+	 return the_resource;
+ }

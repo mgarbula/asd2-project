@@ -15,6 +15,7 @@ public:
 	task(const task&);
 	task(unsigned int, std::vector<resource>);
 	std::vector<resource> getResources();
+	resource getTheResource();
 	unsigned int getTaskNumber();
 	friend std::ostream& operator<<(std::ostream& os, const task& ts);
 	friend bool operator==(const task&, const task&);

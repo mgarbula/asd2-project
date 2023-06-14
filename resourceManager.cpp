@@ -40,7 +40,7 @@ int resourceManager::getRecTransition()
 resource resourceManager::selectRes(std::vector<resource> _resources)
 {
     double value = randomDouble();
-    int resSize = 2;//(sizeof(resources) / sizeof(resources[0]));
+    int resSize = _resources.size();
     int i, j;
     for (i = 0; i < resSize; i++)
         resources[i].lastTime++;

@@ -74,6 +74,8 @@ int main(){
 
 		newGeneartion = selection(generation, clones + crosses + mutations);
 		
+		std::cout << "Best of new gen: " << newGeneartion[0].totalCost << std::endl;
+
 		if (newGeneartion[0].totalCost < bestCost) {
 			currentLoops = 0;
 			bestFromGeneration = newGeneartion[0];

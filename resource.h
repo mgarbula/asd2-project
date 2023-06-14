@@ -4,8 +4,8 @@
 class resource
 {
 private:
-    const unsigned int time;
-    const unsigned int price;
+    unsigned int time;
+    unsigned int price;
     unsigned int counter;
     unsigned int lastUsed;
 public:
