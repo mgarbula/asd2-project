@@ -5,13 +5,16 @@
 #include <algorithm>
 
 spanning_tree::spanning_tree(task_graph graph) {
-	vertices = graph.getVertices();
+	this->vertices = graph.getVertices();
 	edges = graph.breadthFirstSearch();
 	howManyResources = graph.getHowManyResources();
 	//totalCost = graph.getTotalCost();
 	mapToFenotype();
-	for (auto t : vertices) {
-		std::cout << "price: " << t.getTheResource().getPrice() << std::endl;
+	for (task t : this->vertices) {
+		for (resource v : t.getResources()) {
+			//std::cout << "el: " << v.getPrice() <<  " a price: to " << t.getTheResource().getPrice() << std::endl;
+		}
+		//std::cout << "price: " << t.getTheResource().getPrice() << std::endl;
 	}
 	countCost();
 #ifdef DEBUG
@@ -19,10 +22,17 @@ spanning_tree::spanning_tree(task_graph graph) {
 #endif // DEBUG
 
 }
-spanning_tree& spanning_tree::operator = (spanning_tree& other) {
+/*spanning_tree& spanning_tree::operator = (spanning_tree& other) {
 	this->vertices = other.vertices;
 	this->edges = other.edges;
 	return *this;
+}*/
+spanning_tree::spanning_tree(const spanning_tree& other) {
+	this->edges = edges;
+	this->vertices = vertices;
+	this->totalCost = other.totalCost;
+	this->howManyResources = other.howManyResources;
+	
 }
 spanning_tree& spanning_tree::operator=(const spanning_tree& other)
 {
@@ -30,6 +40,8 @@ spanning_tree& spanning_tree::operator=(const spanning_tree& other)
 		return *this;
 	this->vertices = other.vertices;
 	this->edges = other.edges;
+	this->totalCost = other.totalCost;
+	this->howManyResources = other.howManyResources;
 	return *this;
 }
 
@@ -78,7 +90,7 @@ spanning_tree spanning_tree::mutation() {
 	std::uniform_real_distribution<> dist(min, vertices.size() - 1);
 	int cross_point = dist(gen);
 	spanning_tree tree = *this;
-	tree.vertices[cross_point].setResource(resourceManager::selectRes(vertices[cross_point].getResources()));
+	//tree.vertices[cross_point].setResource(resourceManager::selectRes(vertices[cross_point].getResources()));
 	return tree;
 
 }
@@ -90,10 +102,11 @@ spanning_tree spanning_tree::clonning() {
 void spanning_tree::mapToFenotype() {
 	//currentFenotype.clear();
 	//for (auto v : vertices) {
-	for (int i = 0; i < vertices.size(); i++) {
+	for (int i = 0; i < this->vertices.size(); i++) {
 		//fenotype f(v);
 		//v.setResource(f.getResource());
-		vertices[i].setResource(resourceManager::selectRes(vertices[i].getResources()));
+		this->vertices[i].setResource(resourceManager::selectRes(this->vertices[i].getResources()));
+		//std::cout << "Resource wybrany i jest to " << this->vertices[i].getTheResource().getPrice() << std::endl;
 		//currentFenotype.push_back(f);
 	}
 }

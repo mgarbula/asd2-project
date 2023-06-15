@@ -80,7 +80,7 @@ int main(){
 
 		std::cout << "============================" << newGeneartion[0].totalCost << std::endl;
 
-		if (newGeneartion[0].totalCost < bestCost) {
+		if (newGeneartion[0].totalCost < bestCost ) {
 			currentLoops = 0;
 			bestFromGeneration = newGeneartion[0];
 			bestCost = bestFromGeneration.totalCost;
@@ -114,6 +114,6 @@ int main(){
 
 		generation = newGeneartion;
 	}
-
+	system("pause");
     return 0;
 }

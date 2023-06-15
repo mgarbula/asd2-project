@@ -142,6 +142,7 @@ resource resourceManager::selectRes(std::vector<resource> _resources)
     }
     resources[j].lastTime = 0;
     resources[j].allocTimes++;
+    //std::cout << "Wybrany resource to " << _resources[j].getPrice() << std::endl;
     return _resources[j];
 }
 /// <summary>

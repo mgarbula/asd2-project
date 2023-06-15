@@ -2,7 +2,7 @@
 
 task::task(unsigned int _taskNumber, std::vector<resource> _resources) : taskNumber{ _taskNumber }, resources{ _resources } {}
 
-task::task(const task& t) : taskNumber{ t.taskNumber }, resources{ t.resources }  {}
+task::task(const task& t) : taskNumber{ t.taskNumber }, resources{ t.resources } { this->resources = t.resources; this->the_resource = t.the_resource; }
 
 std::vector<resource> task::getResources() {
 	return resources;
@@ -25,9 +25,14 @@ bool operator==(const task& taskL, const task& taskR) {
 	return taskL.taskNumber == taskR.taskNumber;
 }
  task & task::operator = (const task& other) {
+	 if (this == &other) {
+		 return *this;
+	 }
+	 this->the_resource = other.the_resource;
 	 this->resources = other.resources;
 	 return *this;
 }
+ 
  void task::setResource(resource resource_) {
 	 this->the_resource = resource_;
  }
