@@ -36,11 +36,21 @@ resource::resource(unsigned int _time, unsigned int _price) : time{_time}, price
     counter = 0;
 }
 resource& resource::operator = (const resource& other) {
+	if (this == &other) {
+		return *this;
+	}
     this->price = other.price;
     this->time = other.time;
     this->counter = other.counter;
     this->lastUsed = other.lastUsed;
     return *this;
+}
+
+resource::resource(const resource& other) {
+	this->price = other.price;
+	this->time = other.time;
+	this->counter = other.counter;
+	this->lastUsed = other.lastUsed;
 }
 
 resource::~resource()

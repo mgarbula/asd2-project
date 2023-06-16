@@ -28,8 +28,8 @@ spanning_tree::spanning_tree(task_graph graph) {
 	return *this;
 }*/
 spanning_tree::spanning_tree(const spanning_tree& other) {
-	this->edges = edges;
-	this->vertices = vertices;
+	this->edges = other.edges;
+	this->vertices = other.vertices;
 	this->totalCost = other.totalCost;
 	this->howManyResources = other.howManyResources;
 	
@@ -102,10 +102,12 @@ spanning_tree spanning_tree::clonning() {
 void spanning_tree::mapToFenotype() {
 	//currentFenotype.clear();
 	//for (auto v : vertices) {
+	this->totalCost = 0;
 	for (int i = 0; i < this->vertices.size(); i++) {
 		//fenotype f(v);
 		//v.setResource(f.getResource());
 		this->vertices[i].setResource(resourceManager::selectRes(this->vertices[i].getResources()));
+		this->totalCost += this->vertices[i].getTheResource().getPrice();
 		//std::cout << "Resource wybrany i jest to " << this->vertices[i].getTheResource().getPrice() << std::endl;
 		//currentFenotype.push_back(f);
 	}

@@ -16,6 +16,7 @@ public:
     unsigned int getCount();
     unsigned int getLastUsedTimer();
     resource(unsigned int=0, unsigned int=0);
+	resource(const resource&);
     resource& operator = (const resource& other);
     ~resource();
 };
