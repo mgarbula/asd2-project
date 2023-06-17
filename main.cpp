@@ -9,9 +9,12 @@
 std::vector<spanning_tree> createGeneration(task_graph tgraph, int generationSize, int howManyRes) {
 	std::vector<spanning_tree> generation;
 	for (int i = 0; i < tgraph.getVertices().size() * generationSize * howManyRes; i++) {
-		spanning_tree stree(tgraph);
-		generation.push_back(stree);
+		spanning_tree* ptr = new spanning_tree(tgraph);
+		//spanning_tree stree(tgraph);
+		
+		generation.push_back(*ptr);
 	}
+	
 	return generation;
 }
 
@@ -32,33 +35,33 @@ int main(){
 	int generationSize;
 	int stopCondition;
 
-	/*std::cout << "Podaj wielkosc pokolenia poczatkowego\n";
+	std::cout << "Podaj wielkosc pokolenia poczatkowego\n";
 	std::cin >> generationSize;
 	std::string fileName;
 	std::cout << "Podaj nazwe grafu\n";
 	std::cin >> fileName;
 	std::cout << "Podaj warunek stopu\n";
-	std::cin >> stopCondition;*/
+	std::cin >> stopCondition;
 
 	int currentLoops = 0;
 	float clone, cross, mutation;
 	double time;
 
-	/*std::cout << "Podaj ile klonowan\n";
+	std::cout << "Podaj ile klonowan\n";
 	std::cin >> clone;
 	std::cout << "Podaj ile krzyzowan\n";
 	std::cin >> cross;
 	std::cout << "Podaj ile mutacji\n";
 	std::cin >> mutation;
 	std::cout << "Podaj czas nie do przekroczenia\n";
-	std::cin >> time;*/
-	generationSize = 10;
+	std::cin >> time;
+	/*generationSize = 10;
 	std::string fileName = "graf10.txt";
 	stopCondition = 5;
 	clone = 0.3;
 	cross = 0.4;
 	mutation = 0.3;
-	time = 300;
+	time = 10000;*/
 
 	task_graph tgraph(fileName);
 
@@ -83,6 +86,7 @@ int main(){
 		if (newGeneartion[0].totalCost < bestCost ) {
 			std::cout << "Koszt jest lepszy i wynosi: " << newGeneartion[0].totalCost << std::endl;
 			std::cout << "ale czy czas sie zgadza? ";
+			std::cout << "czas: " << newGeneartion[0].totalTime << std::endl;
 			if (newGeneartion[0].totalTime <= time) {
 				std::cout << "TAK!\n";
 				currentLoops = 0;
@@ -118,7 +122,6 @@ int main(){
 				modifiedGeneration.push_back((*it).mutation());
 			}
 		}
-
 		for (int i = 0; i < modifiedGeneration.size(); i++) {
 			modifiedGeneration[i].mapToFenotype();
 		}

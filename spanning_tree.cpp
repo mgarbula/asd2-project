@@ -70,7 +70,7 @@ spanning_tree::spanning_tree(const spanning_tree& other) {
 	this->vertices = other.vertices;
 	this->totalCost = other.totalCost;
 	this->howManyResources = other.howManyResources;
-	
+	this->totalTime = other.totalTime;
 }
 spanning_tree& spanning_tree::operator=(const spanning_tree& other)
 {
@@ -80,6 +80,7 @@ spanning_tree& spanning_tree::operator=(const spanning_tree& other)
 	this->edges = other.edges;
 	this->totalCost = other.totalCost;
 	this->howManyResources = other.howManyResources;
+	this->totalTime = other.totalTime;
 	return *this;
 }
 
@@ -127,9 +128,9 @@ spanning_tree spanning_tree::mutation() {
 	int min = 0;
 	std::uniform_real_distribution<> dist(min, vertices.size() - 1);
 	int cross_point = dist(gen);
-	spanning_tree tree = *this;
-	tree.vertices[cross_point].setResource(resourceManager::selectRes(vertices[cross_point].getResources()));
-	return tree;
+	//spanning_tree tree = *this;
+	vertices[cross_point].setResource(resourceManager::selectRes(vertices[cross_point].getResources()));
+	return *this;
 
 }
 spanning_tree spanning_tree::clonning() {
@@ -138,16 +139,10 @@ spanning_tree spanning_tree::clonning() {
 }
 
 void spanning_tree::mapToFenotype() {
-	//currentFenotype.clear();
-	//for (auto v : vertices) {
 	this->totalCost = 0;
 	for (int i = 0; i < vertices.size(); i++) {
-		//fenotype f(v);
-		//v.setResource(f.getResource());
 		this->vertices[i].setResource(resourceManager::selectRes(this->vertices[i].getResources()));
 		this->totalCost += this->vertices[i].getTheResource().getPrice();
-		//std::cout << "Resource wybrany i jest to " << this->vertices[i].getTheResourceNumber() << std::endl;
-		//currentFenotype.push_back(f);
 	}
 	countTime();
 }
@@ -161,21 +156,13 @@ double spanning_tree::countTime() {
 		int parentTaskResourceNumber = (*parentTask).getTheResourceNumber();
 		int childTaskResourceNumber = (*childTask).getTheResourceNumber();
 		if (parentTaskResourceNumber == childTaskResourceNumber) {
-			std::cout << "przed if\n";
-			std::cout << "timesSize " << timesOfResources.size() << std::endl;
-			std::cout << "parentTaskResourceNumber " << parentTaskResourceNumber << std::endl;
 			timesOfResources[parentTaskResourceNumber] += ((*parentTask).getTheResource().getTime() + (*childTask).getTheResource().getTime());
-			std::cout << "po if\n";
 		}
 		else {
-			std::cout << "przed else\n";
 			timesOfResources[parentTaskResourceNumber] += (*parentTask).getTheResource().getTime();
-			std::cout << "po else 1\n";
 			timesOfResources[childTaskResourceNumber] += (timesOfResources[parentTaskResourceNumber] + weight/broadcast + (*childTask).getTheResource().getTime());
-			std::cout << "po else 2\n";
 		}
 	}
 	totalTime = *std::max_element(timesOfResources.begin(), timesOfResources.end());
-
 	return totalTime;
 }
