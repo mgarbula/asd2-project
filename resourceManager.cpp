@@ -37,7 +37,7 @@ int resourceManager::getRecTransition()
 /// Returns resource randomly
 /// </summary>
 /// <returns>Type Resource</returns>
-resource resourceManager::selectRes(std::vector<resource> _resources)
+std::pair<resource, int> resourceManager::selectRes(std::vector<resource> _resources)
 {
     double value = randomDouble();
     int resSize = _resources.size();
@@ -143,7 +143,8 @@ resource resourceManager::selectRes(std::vector<resource> _resources)
     resources[j].lastTime = 0;
     resources[j].allocTimes++;
     //std::cout << "Wybrany resource to " << _resources[j].getPrice() << std::endl;
-    return _resources[j];
+	std::pair<resource, int> pair(_resources[j], j);
+	return pair;
 }
 /// <summary>
 /// Returns random double between 0 and max

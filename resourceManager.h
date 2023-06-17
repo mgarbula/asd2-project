@@ -25,7 +25,7 @@ private:
 public:
     static void reset();
     static void init(unsigned int);
-    static resource selectRes(std::vector<resource>); //Random pick the next res
+    static std::pair<resource, int> selectRes(std::vector<resource>); //Random pick the next res
     static double randomDouble(double = 1.0); //Returns random double from 0 to 1
     static void startRecTransition(); 
     static int getRecTransition();

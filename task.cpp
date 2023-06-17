@@ -36,10 +36,15 @@ task & task::operator = (const task& other) {
 	 return *this;
 }
  
- void task::setResource(resource resource_) {
-	 this->the_resource = resource_;
+ void task::setResource(std::pair<resource, int> resource_) {
+	 this->the_resource = resource_.first;
+	 this->theResourceNumber = resource_.second;
  }
  resource task::getTheResource()
  {
 	 return the_resource;
+ }
+
+ int task::getTheResourceNumber() {
+	 return theResourceNumber;
  }

@@ -9,10 +9,14 @@
 class spanning_tree {
 public:
 	std::vector<task> vertices;
-	std::vector<std::pair<std::pair<task, task>, int>> edges;
+	//std::vector<std::pair<std::pair<task, task>, int>> edges;
+	std::vector<std::pair<std::pair<int, int>, int>> helpEdges;
+	std::vector<std::pair<std::pair<task*, task*>, int>> edges;
 	//std::vector<fenotype> currentFenotype;
 	unsigned int howManyResources;
 	unsigned int totalCost;
+	double totalTime;
+	unsigned int broadcast;
 public:
 	//spanning_tree() {}
 	spanning_tree(task_graph);
@@ -22,9 +26,13 @@ public:
 	spanning_tree mutation();
 	spanning_tree clonning();
 	unsigned int countCost();
+	double countTime();
 	unsigned int getHowManyResources();
 	void mapToFenotype();
 	spanning_tree(const spanning_tree& other);
+private:
+	void createEdges(std::vector<std::pair<std::pair<int, int>, int>>);
+	std::vector<std::pair<std::pair<task*, task*>, int>> breadthFirstSearch();
 };
 
 

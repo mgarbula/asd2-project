@@ -81,14 +81,16 @@ void task_graph::getHelpEdgesFromFile(unsigned int number, std::string task) {
 	}
 }
 
-void task_graph::createEdges(std::vector<std::pair<std::pair<int, int>, int>> help) {
-	for (std::vector<std::pair<std::pair<int, int>, int>>::iterator it = help.begin(); it != help.end(); ++it) {
-		std::pair<std::pair<int, int>, int> fullPair = *it;
-		std::pair<task, task> taskEdge(vertices[fullPair.first.first], vertices[fullPair.first.second]);
-		std::pair<std::pair<task, task>, int> edgeWithWeight(taskEdge, fullPair.second);
-		edges.push_back(edgeWithWeight);
-	}
-}
+//void task_graph::createEdges(std::vector<std::pair<std::pair<int, int>, int>> help) {
+//	for (std::vector<std::pair<std::pair<int, int>, int>>::iterator it = help.begin(); it != help.end(); ++it) {
+//		std::pair<std::pair<int, int>, int> fullPair = *it;
+//		std::cout << "nu,mber bez pointera " << vertices[fullPair.first.first].getTheResourceNumber() << std::endl;
+//		std::pair<task*, task*> taskEdge(&(vertices[fullPair.first.first]), &(vertices[fullPair.first.second]));
+//		std::cout << "number " << (*taskEdge.first).getTheResourceNumber() << std::endl;
+//		std::pair<std::pair<task*, task*>, int> edgeWithWeight(taskEdge, fullPair.second);
+//		edges.push_back(edgeWithWeight);
+//	}
+//}
 
 void task_graph::createTasksAndHelpEdges(std::vector<std::string> tasks, std::vector<std::string> times, std::vector<std::string> costs) {
 	for (int i = 0; i < tasks.size(); i++) {
@@ -120,29 +122,48 @@ void task_graph::calcPerf()
 	resourceManager::reset();
 	totalCost = 0;
 	totalTime = 0;
-	for (auto v : vertices)
+	//for (auto v : vertices)
+	for (int i = 0; i < vertices.size(); i++)
 	{
-		resource r = resourceManager::selectRes(v.getResources());
-		v.setResource(r);
-		totalCost += r.getPrice();
-		totalTime += r.getTime();
+		std::pair<resource, int> r = resourceManager::selectRes(vertices[i].getResources());
+		vertices[i].setResource(r);
+		totalCost += r.first.getPrice();
+		totalTime += r.first.getTime();
 	}
 
+}
+
+void task_graph::setBroadcast(std::string str) {
+	int spaces = 0;
+	int index = 0;
+	while (spaces < 2) {
+		if (str[index++] == ' ') {
+			spaces++;
+		}
+	}
+	std::string help;
+	while (str[index] != ' ') {
+		help += str[index++];
+	}
+	broadcast = stoi(help);
 }
 
 task_graph::task_graph(std::string pathToFile) {
 	std::vector<std::string> tasks = readFromFile(pathToFile, "@tasks");
 	std::vector<std::string> times = readFromFile(pathToFile, "@times");
 	std::vector<std::string> costs = readFromFile(pathToFile, "@cost ");
+	std::vector<std::string> broadcastStr = readFromFile(pathToFile, "@comm ");
 
 	createTasksAndHelpEdges(tasks, times, costs);
-	createEdges(helpEdges);
+	
 	readHowManyRes(pathToFile);
+	resourceManager::init(howManyResources);
+	calcPerf();
+	//createEdges(helpEdges);
+	setBroadcast(broadcastStr[0]);
 	for (int i = 0; i < vertices.size(); i++) {
 		std::cout << vertices[i];
 	}
-	resourceManager::init(howManyResources);
-	calcPerf();
 	std::cout << "\n" << totalTime << " <- czas " << totalCost << " <- koszt\n";
 }
 
@@ -150,33 +171,33 @@ std::vector<task> task_graph::getVertices() {
 	return vertices;
 }
 
-std::vector<std::pair<std::pair<task, task>, int>> task_graph::breadthFirstSearch() {
-	std::queue<task> queue;
-	std::vector<task> visited;
-	std::vector<std::pair<std::pair<task, task>, int>> treeEdges;
-
-	queue.push(vertices[0]);
-
-	while (!queue.empty()) {
-		task elem = queue.front();
-		visited.push_back(elem);
-		queue.pop();
-
-		std::vector<std::pair<std::pair<task, task>, int>> help;
-
-		for (std::vector<std::pair<std::pair<task, task>, int>>::iterator it = edges.begin(); it != edges.end(); ++it) {
-			if (elem == (*it).first.first) {
-				help.push_back(*it);
-			}
-		}
-
-		std::for_each(help.begin(), help.end(), [&treeEdges, &queue, &visited](std::pair<std::pair<task, task>, int> pair) { 
-			if (std::find(visited.begin(), visited.end(), pair.first.second) == visited.end()) {
-				queue.push(pair.first.second);
-				treeEdges.push_back(pair);
-			}
-		});
-	}
-
-	return treeEdges;
-}
+//std::vector<std::pair<std::pair<task*, task*>, int>> task_graph::breadthFirstSearch() {
+//	std::queue<task*> queue;
+//	std::vector<task*> visited;
+//	std::vector<std::pair<std::pair<task*, task*>, int>> treeEdges;
+//
+//	queue.push(&(vertices[0]));
+//
+//	while (!queue.empty()) {
+//		task* elem = queue.front();
+//		visited.push_back(elem);
+//		queue.pop();
+//
+//		std::vector<std::pair<std::pair<task*, task*>, int>> help;
+//
+//		for (std::vector<std::pair<std::pair<task*, task*>, int>>::iterator it = edges.begin(); it != edges.end(); ++it) {
+//			if (*elem == *((*it).first.first)) {
+//				help.push_back(*it);
+//			}
+//		}
+//
+//		std::for_each(help.begin(), help.end(), [&treeEdges, &queue, &visited](std::pair<std::pair<task*, task*>, int> pair) { 
+//			if (std::find(visited.begin(), visited.end(), pair.first.second) == visited.end()) {
+//				queue.push(pair.first.second);
+//				treeEdges.push_back(pair);
+//			}
+//		});
+//	}
+//
+//	return treeEdges;
+//}

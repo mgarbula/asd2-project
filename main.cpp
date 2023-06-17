@@ -30,31 +30,35 @@ int main(){
 	resourceManager::reset();
 
 	int generationSize;
-	int howManyLoops;
+	int stopCondition;
 
 	/*std::cout << "Podaj wielkosc pokolenia poczatkowego\n";
 	std::cin >> generationSize;
 	std::string fileName;
 	std::cout << "Podaj nazwe grafu\n";
 	std::cin >> fileName;
-	std::cout << "Podaj ilosc petli\n";
-	std::cin >> howManyLoops;*/
+	std::cout << "Podaj warunek stopu\n";
+	std::cin >> stopCondition;*/
 
 	int currentLoops = 0;
 	float clone, cross, mutation;
+	double time;
 
 	/*std::cout << "Podaj ile klonowan\n";
 	std::cin >> clone;
 	std::cout << "Podaj ile krzyzowan\n";
 	std::cin >> cross;
 	std::cout << "Podaj ile mutacji\n";
-	std::cin >> mutation;*/
-	generationSize = 100;
-	std::string fileName = "graf30.txt";
-	howManyLoops = 7;
+	std::cin >> mutation;
+	std::cout << "Podaj czas nie do przekroczenia\n";
+	std::cin >> time;*/
+	generationSize = 10;
+	std::string fileName = "graf10.txt";
+	stopCondition = 5;
 	clone = 0.3;
 	cross = 0.4;
 	mutation = 0.3;
+	time = 300;
 
 	task_graph tgraph(fileName);
 
@@ -66,27 +70,30 @@ int main(){
 	spanning_tree bestFromGeneration = generation[12];
 	unsigned int bestCost = bestFromGeneration.totalCost;
 
-	while (currentLoops < howManyLoops) {
+	while (currentLoops < stopCondition) {
 		int i = 0;
 		int clones = clone * generation.size();
 		int crosses = cross * generation.size();
 		int mutations = mutation * generation.size();
 
 		newGeneartion = selection(generation, clones + crosses + mutations);
-		
-		//std::cout << "Best of new gen: " << newGeneartion[0].totalCost << std::endl;
-
-		/*for (auto g : newGeneartion) {
-			std::cout << "cost of that: " << g.totalCost << std::endl;
-		}*/
 
 		std::cout << "============================" << newGeneartion[0].totalCost << std::endl;
 
 		if (newGeneartion[0].totalCost < bestCost ) {
-			currentLoops = 0;
-			bestFromGeneration = newGeneartion[0];
-			bestCost = bestFromGeneration.totalCost;
-			std::cout << "nowy najlepszy koszt: " << bestCost << std::endl;
+			std::cout << "Koszt jest lepszy i wynosi: " << newGeneartion[0].totalCost << std::endl;
+			std::cout << "ale czy czas sie zgadza? ";
+			if (newGeneartion[0].totalTime <= time) {
+				std::cout << "TAK!\n";
+				currentLoops = 0;
+				bestFromGeneration = newGeneartion[0];
+				bestCost = bestFromGeneration.totalCost;
+				std::cout << "nowy najlepszy koszt: " << bestCost << std::endl;
+			}
+			else {
+				std::cout << "NIE!";
+				currentLoops++;
+			}
 		}
 		else {
 			currentLoops++;
@@ -112,17 +119,10 @@ int main(){
 			}
 		}
 
-
-		/*for (auto tree : modifiedGeneration) {
-			tree.mapToFenotype();
-		}*/
 		for (int i = 0; i < modifiedGeneration.size(); i++) {
 			modifiedGeneration[i].mapToFenotype();
 		}
-		//std::cout << "modifiedGeneration " << modifiedGeneration[0].vertices[0].getTheResource().getPrice() << std::endl;
-		//std::cout << "before " << generation[0].vertices[0].getTheResource().getPrice() << std::endl;
 		generation = modifiedGeneration;
-		//std::cout << "after " << generation[0].vertices[0].getTheResource().getPrice() << std::endl;
 	}
 	system("pause");
     return 0;
